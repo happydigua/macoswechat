@@ -1,67 +1,47 @@
-# macOS WeChat Multi-Open (Native & Safe) | 微信 macOS 多开工具 (原生、安全)
+# 微信 macOS 多开工具 (原生、安全、一键) 
+### macOS WeChat Multi-Open (Native & Safe)
 
-A simple, python-based script to create multiple instances of WeChat on macOS without any code injection or third-party tools. Supports custom icon colors (Blue, Red, etc.).
-
-一个基于 Python 的简单脚本，用于在 macOS 上创建多个微信实例。无需任何代码注入或第三方工具，安全可靠。支持自定义图标颜色（蓝色、红色等）以便区分。
-
----
-
-## ✨ Features | 特性
-
-- **Native (原生)**: No injection, no risk of account banning. 不修改二进制文件，无封号风险。
-- **Visual Distinct (视觉区分)**: Recolor the second/third WeChat icon to Blue, Red, etc. 可将第二/三个微信图标染成蓝色、红色等。
-- **Simple (简单)**: Single script to manage creation, language, and launching. 一个脚本搞定创建、语言设置和启动。
+这是一个让您的 Mac 同时运行多个微信的超简单方案。**原生实现，不修改代码，不封号。**
 
 ---
 
-## 🚀 Usage | 使用方法
+## 🚀 傻瓜式一键安装 (推荐)
 
-### 1. Install Dependencies | 安装依赖
+如果您想立刻拥有第二个微信（蓝色图标），只需打开“终端”（Terminal），复制并粘贴以下命令按回车：
+
 ```bash
-pip3 install Pillow
+git clone https://github.com/happydigua/macoswechat.git && cd macoswechat && chmod +x install.sh && ./install.sh
 ```
 
-### 2. Create Second Instance (Blue Icon) | 创建第二个副本 (蓝色图标)
+**就这样！** 脚本运行完后，您的蓝色微信会自动跳出来。
+
+---
+
+## 🎨 想要开更多？(进阶用法)
+
+如果您想开第三个微信（比如红色），请在终端依次运行：
+
 ```bash
-# 创建副本
-python3 wechat_dual_open.py create
-
-# 将图标染成蓝色
-python3 wechat_dual_open.py recolor-icon --blue "#1296db"
-
-# 启动
-python3 wechat_dual_open.py launch
-```
-
-### 3. Create Third Instance (Red Icon) | 创建第三个副本 (红色图标)
-```bash
-# 创建第三个副本，指定不同的路径和标识符
+# 1. 创建第三个副本
 python3 wechat_dual_open.py --target-app ~/Applications/WeChat-3.app --bundle-id com.tencent.xin3 create
 
-# 将图标染成红色
+# 2. 染成红色
 python3 wechat_dual_open.py --target-app ~/Applications/WeChat-3.app --bundle-id com.tencent.xin3 recolor-icon --blue "#e0110d"
 
-# 启动
+# 3. 启动
 python3 wechat_dual_open.py --target-app ~/Applications/WeChat-3.app --bundle-id com.tencent.xin3 launch
 ```
 
 ---
 
-## 🛠️ Commands Summary | 命令详解
+## ✨ 为什么选择这个方案？
 
-- `status`: Check current instances. 查看当前已创建的实例状态。
-- `create`: Create a new app copy. 创建一个新的应用副本。
-- `recolor-icon`: Change the app icon color. 修改应用图标颜色。
-- `set-language`: Set language preference (default: zh-Hans). 设置语言偏好（默认为中文）。
-- `launch`: Open the specified instance. 启动指定实例。
+1.  **绝对安全**：通过 macOS 官方的 Bundle ID 机制实现，不涉及任何外挂或插件注入。
+2.  **视觉区分**：自动给图标染色（蓝、红、橙等），再也不怕点错账号。
+3.  **极简操作**：不需要懂编程，一键脚本自动搞定依赖和重签名。
 
 ---
 
-## ⚠️ Note | 注意事项
-
-- **Updates**: If you update the official WeChat, you might need to run the script again to sync the copy. 如果更新了官方微信，可能需要重新运行脚本以同步副本。
-- **Notifications**: Push notifications for copies might not be as reliable as the original app. 副本的推送通知可能不如原版稳定。
-
-## 🤝 Credits | 鸣谢
-Based on the work of [mcncarl/yichen-skills](https://github.com/mcncarl/yichen-skills).
-Original idea from [@koffuxu](https://x.com/koffuxu/status/2043110831584690427).
+## 🤝 鸣谢
+本项目基于 [mcncarl/yichen-skills](https://github.com/mcncarl/yichen-skills) 的脚本进行封装优化。
+灵感来源 [@koffuxu](https://x.com/koffuxu/status/2043110831584690427)。
