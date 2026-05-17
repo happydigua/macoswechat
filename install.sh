@@ -17,9 +17,9 @@ fi
 echo "📦 正在安装必要插件 (Pillow)..."
 python3 -m pip install Pillow --quiet --break-system-packages 2>/dev/null || python3 -m pip install Pillow --quiet
 
-# 3. 执行创建逻辑 (默认创建第二个微信并染成蓝色)
-echo "📂 正在创建微信副本并染成蓝色 (这可能需要 1-2 分钟，请稍候)..."
-python3 wechat_dual_open.py create
+# 3. 执行同步逻辑（首次会创建，后续可自动适配微信更新）
+echo "📂 正在同步微信副本并染成蓝色 (这可能需要 1-2 分钟，请稍候)..."
+python3 wechat_dual_open.py sync
 python3 wechat_dual_open.py recolor-icon --blue "#1296db"
 
 # 4. 启动
