@@ -59,6 +59,14 @@ def app_version(app: Path) -> str:
         return "unknown"
 
 
+def app_build(app: Path) -> str:
+    try:
+        info = read_plist(plist_path(app))
+        return info.get("CFBundleVersion") or "unknown"
+    except Exception:
+        return "unknown"
+
+
 def bundle_id(app: Path) -> str:
     try:
         return read_plist(plist_path(app)).get("CFBundleIdentifier", "unknown")
@@ -180,6 +188,37 @@ def create(source: Path, target: Path, new_bundle_id: str, languages: list[str])
     codesign(target)
     register_and_refresh(target)
     print(f"created: {target}")
+
+
+def sync(source: Path, target: Path, new_bundle_id: str, languages: list[str]) -> None:
+    """Ensure target exists and tracks the latest source app version.
+
+    If source and target versions differ (common after WeChat auto-update),
+    recreate the target from the updated source while preserving bundle id and
+    language preferences.
+    """
+    if not source.exists():
+        raise SystemExit(f"Source app not found: {source}")
+
+    if not target.exists():
+        print("target missing -> creating a fresh copy")
+        create(source, target, new_bundle_id, languages)
+        return
+
+    src_ver = app_version(source)
+    tgt_ver = app_version(target)
+    src_build = app_build(source)
+    tgt_build = app_build(target)
+    source_sig = (src_ver, src_build)
+    target_sig = (tgt_ver, tgt_build)
+    if source_sig != target_sig:
+        print(f"version/build changed ({target_sig} -> {source_sig}) -> recreating target")
+        shutil.rmtree(target)
+        create(source, target, new_bundle_id, languages)
+        return
+
+    print("version unchanged -> repairing metadata/signature")
+    repair(target, new_bundle_id, languages)
 
 
 def repair(target: Path, new_bundle_id: str, languages: list[str]) -> None:
@@ -335,6 +374,9 @@ def main() -> int:
     repair_p = sub.add_parser("repair")
     repair_p.add_argument("--languages", nargs="+", default=DEFAULT_LANGUAGES)
 
+    sync_p = sub.add_parser("sync")
+    sync_p.add_argument("--languages", nargs="+", default=DEFAULT_LANGUAGES)
+
     lang_p = sub.add_parser("set-language")
     lang_p.add_argument("--languages", nargs="+", default=DEFAULT_LANGUAGES)
 
@@ -355,6 +397,8 @@ def main() -> int:
         create(source, target, args.bundle_id, args.languages)
     elif args.command == "repair":
         repair(target, args.bundle_id, args.languages)
+    elif args.command == "sync":
+        sync(source, target, args.bundle_id, args.languages)
     elif args.command == "set-language":
         set_language(args.bundle_id, args.languages)
         print(f"language preference set for {args.bundle_id}: {args.languages}")

@@ -15,6 +15,16 @@ git clone https://github.com/happydigua/macoswechat.git && cd macoswechat && chm
 
 **就这样！** 脚本运行完后，您的蓝色微信会自动跳出来。
 
+> 微信升级后副本失效？现在不用手动删到回收站了，直接执行：
+>
+> ```bash
+> cd macoswechat && python3 wechat_dual_open.py sync
+> ```
+>
+> `sync` 会自动判断版本：
+> - 版本变了：自动删除旧副本并重建。
+> - 版本没变：只做修复/重签名。
+
 ---
 
 ## 🎨 想要开更多？(进阶用法)
